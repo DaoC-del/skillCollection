@@ -1,0 +1,37 @@
+# 2025-09-27 学习记录
+
+- **品牌类型**
+  - `{ readonly __brand: "Username" }` 是 TypeScript 的品牌类型技巧。
+  - 作用：让 `string` 在编译期区分成更具体的类型（如 `Username`），运行时没有开销。
+  - 示例：
+    ```ts
+    type Username = string & { readonly __brand: "Username" };
+    let u: Username = "Alice" as Username; // ✅
+    ```
+
+- **电话标准**
+  - E.164：国际电联（ITU）定义的国际电话号码标准（`+<国家><地区><号码>`，最多 15 位数字）。
+  - E.22：ITU 的另一个电信标准，不是 ESLint 版本号。
+
+- **unknown**
+  - 引入：TypeScript 3.0 (2018)。
+  - 相比 `any` 更安全，必须先收窄或断言才能使用。
+  - 示例：
+    ```ts
+    let x: unknown = getSomething();
+    if (typeof x === "string") x.toUpperCase(); // ✅
+    ```
+
+- **正则**
+  - `s.replace(/[^\d]/g, "")`：去掉所有非数字字符，只保留数字。
+  - 示例：
+    ```ts
+    " +81 90-1234-5678 ".replace(/[^\d]/g, ""); // => "819012345678"
+    ```
+
+- **any 的危害**
+  1. 编译器失明：所有操作都通过，运行时才崩。
+  2. 类型污染：`any` 会传播，让结果失去提示。
+  3. 隐性兼容：能赋给任意类型，破坏契约。
+  4. 协作成本高：隐藏 bug，重构困难。
+  - 替代方案：用 `unknown`、联合类型、schema 校验。
